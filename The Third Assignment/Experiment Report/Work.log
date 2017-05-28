@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015/W32TeX) (preloaded format=xelatex 2016.10.22)  28 MAY 2017 11:26
+This is XeTeX, Version 3.14159265-2.6-0.99992 (TeX Live 2015/W32TeX) (preloaded format=xelatex 2016.10.22)  28 MAY 2017 15:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2165,6 +2165,14 @@ Overfull \hbox (8.86719pt too wide) in paragraph at lines 145--147
 [3]
 Chapter 2.
 (./Work.ptc)
+LaTeX Font Info:    External font `yhcmex10' loaded for size
+(Font)              <5> on input line 171.
+
+
+LaTeX Font Warning: Font shape `U/wasy/b/n' in size <5> not available
+(Font)              Font shape `U/wasy/m/n' tried instead on input line 171.
+
+
 Overfull \hbox (6.31906pt too wide) in paragraph at lines 169--172
 []\EU1/SimSun(0)/m/n/12 创 建 新 的 数 据 点 集 $\OML/cmm/m/it/12 x[] \OT1/cmr/m/n/12 =
  0\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 1\OML/cmm/m/it/12 i; y[] \OT1/cmr/m/n/12 = 
@@ -2180,35 +2188,22 @@ m/it/12 ; \OT1/cmr/m/n/12 2\OML/cmm/m/it/12 ; []  ; \OT1/cmr/m/n/12 8; \OML/cmm
 ]
 File: flow1.pdf Graphic file (type QTm)
  <use  "flow1.pdf" >
-Overfull \hbox (93.89592pt too wide) in paragraph at lines 178--179
+Overfull \hbox (65.44316pt too wide) in paragraph at lines 182--183
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-LaTeX Font Info:    External font `yhcmex10' loaded for size
-(Font)              <5> on input line 201.
-
-LaTeX Font Warning: Font shape `U/wasy/b/n' in size <5> not available
-(Font)              Font shape `U/wasy/m/n' tried instead on input line 201.
-
 Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
-put line 205.
+put line 209.
 [5] [6]
-LaTeX Font Info:    Try loading font information for U+euf on input line 288.
+LaTeX Font Info:    Try loading font information for U+euf on input line 292.
  (c:/texlive/2015/texmf-dist/tex/latex/amsfonts/ueuf.fd
 File: ueuf.fd 2013/01/14 v3.01 Euler Fraktur
-)
-
-LaTeX Warning: Reference `qm' on page 7 undefined on input line 303.
-
-[7] [8]
+) [7] [8]
+[9]
 Chapter 3.
-(./Work.ptc) [9
-
-]
-Chapter 4.
 (./Work.ptc) (c:/texlive/2015/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2014/09/06 1.5e listings language file
 )
@@ -2222,59 +2217,59 @@ File: lstmisc.sty 2014/09/06 1.5e (Carsten Heinz)
 * 
 * Try to use `\setCJKmonofont[...]{...}' to define it.
 *************************************************
-LaTeX Font Info:    Try loading font information for EU1+lmtt on input line 350
+LaTeX Font Info:    Try loading font information for EU1+lmtt on input line 379
 .
 (c:/texlive/2015/texmf-dist/tex/latex/euenc/eu1lmtt.fd
 File: eu1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `EU1/lmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `EU1/lmtt/b/n' tried instead on input line 351.
+(Font)              Font shape `EU1/lmtt/b/n' tried instead on input line 380.
 LaTeX Font Info:    External font `yhcmex10' loaded for size
-(Font)              <10.95> on input line 372.
+(Font)              <10.95> on input line 401.
  [10
 
 ] [11]
-Chapter 5.
+Chapter 4.
 (./Work.ptc) [12
 
 ]
-Overfull \hbox (30.85497pt too wide) in paragraph at lines 402--403
+Overfull \hbox (30.85497pt too wide) in paragraph at lines 431--432
 []\EU1/lmr/m/n/12 Eigenvector=(0.079620, 0.045421, -0.018272, -0.047961, -0.349
 567, 0.207215,
  []
 
 
-Overfull \hbox (26.94296pt too wide) in paragraph at lines 408--409
+Overfull \hbox (26.94296pt too wide) in paragraph at lines 437--438
 []\EU1/lmr/m/n/12 Eigenvector=(0.108435, 0.071344, 0.382502, -0.047100, -0.7178
 04, 0.181519,
  []
 
 
-Overfull \hbox (38.67897pt too wide) in paragraph at lines 422--423
+Overfull \hbox (38.67897pt too wide) in paragraph at lines 451--452
 []\EU1/lmr/m/n/12 Eigenvector=(-0.213768, -0.206774, 0.386829, -0.031112, -0.38
 0939, -0.125174,
  []
 
 
-Overfull \hbox (30.85497pt too wide) in paragraph at lines 428--429
+Overfull \hbox (30.85497pt too wide) in paragraph at lines 457--458
 []\EU1/lmr/m/n/12 Eigenvector=(-0.561341, 0.778192, 0.014364, -0.277602, 0.0035
 68, -0.002548,
  []
 
 
-Overfull \hbox (34.76697pt too wide) in paragraph at lines 434--435
+Overfull \hbox (34.76697pt too wide) in paragraph at lines 463--464
 []\EU1/lmr/m/n/12 Eigenvector=(0.062377, -0.011231, -0.252846, -0.130988, -0.38
 1985, 0.815575,
  []
 
 
-Overfull \hbox (42.59097pt too wide) in paragraph at lines 448--449
+Overfull \hbox (42.59097pt too wide) in paragraph at lines 477--478
 []\EU1/lmr/m/n/12 Eigenvector=(-0.104872, -0.217677, -0.474694, -0.259384, -0.3
 04665, -0.259452,
  []
 
 [13]
-Chapter 6.
+Chapter 5.
 (./Work.ptc)
 \tf@ptc=\write7
 \openout7 = `Work.ptc'.
@@ -2282,23 +2277,19 @@ Chapter 6.
  [14
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 481.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 481.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 528.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 528.
  (./Work.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 481.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 481.
-
-
-LaTeX Warning: There were undefined references.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 481.
+Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 528.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 528.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 528.
  ) 
 Here is how much of TeX's memory you used:
- 41505 strings out of 493706
- 790072 string characters out of 6148912
- 941280 words of memory out of 5000000
- 44134 multiletter control sequences out of 15000+600000
- 27324 words of font info for 146 fonts, out of 8000000 for 9000
+ 41509 strings out of 493706
+ 790151 string characters out of 6148912
+ 941364 words of memory out of 5000000
+ 44139 multiletter control sequences out of 15000+600000
+ 27332 words of font info for 147 fonts, out of 8000000 for 9000
  1328 hyphenation exceptions out of 8191
  57i,17n,69p,10484b,1232s stack positions out of 5000i,500n,10000p,200000b,80000s
 

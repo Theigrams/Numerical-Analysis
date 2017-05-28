@@ -154,7 +154,7 @@ $c_{rs}(r = 0,1,\cdots,k;s = 0,1,\cdots,k)$;
 
 \newpage
 \chapter{算法设计方案}
-\section{方案}
+\section{方案综述}
 \begin{enumerate}
 \item 将${x_i} = 0.08i,{y_j} = 0.5 + 0.05j\quad (i=0,1,\cdots,10;j=0,1,\cdots,20)$代入非线性方程组(\ref{e1})中，用\hyperref[sec:Newton]{Newton迭代法}解出$t_{ij}$和$u_{ij}$;
 
@@ -168,14 +168,18 @@ $\sigma \le 10^{-7}$
 \item 
 创建新的数据点集$x_i^{\ast}=0.1i,y_j^{\ast}=0.5+0.2j\quad (i = 1, 2,\cdots,8;j = 1,2,\cdots,5)$,
 并代入非线性方程组(\ref{e1})中，用\hyperref[sec:Newton]{Newton迭代法}解出$t^{\ast}$和$u^{\ast}$,
-再用\hyperref[sec:Interpolation]{分片双二次插值}计算出$f(x^{\ast},y^{\ast})$,将其与$p(x^{\ast},y^{\ast})$输出并观察比较。
+再用\hyperref[sec:Interpolation]{分片双二次插值}计算出$f(x^{\ast},y^{\ast})$,将其与$p(x^{\ast},y^{\ast})$输出并观察比较。\footnote{算法流程图见第\pageref{flow}页。}
 \end{enumerate}
+
+
+
 
 \newpage
 \begin{figure}[h]
 \small
 \centering
-\includegraphics[width=18cm]{flow1}
+\label{flow}
+\includegraphics[width=17cm]{flow1}
 \end{figure}
 
 \newpage
@@ -220,7 +224,7 @@ and $\bm{F}'(\bm{x}^{(k)})$
 \end{algorithmic}  
 \end{algorithm}  
 
-其中，基于方程组(\ref{e1})的雅可比矩阵$\bm{F}(\bm{x}),\bm{F}'(\bm{x})$分别为：
+其中，基于方程组(\ref{e1})的$\bm{F}(\bm{x})\text{及其雅可比矩阵}\bm{F}'(\bm{x})$分别为：
 \[F(\bm{x}) = \left[ \begin{array}{l}
 0.5*cos(t)  +  u  +  v  +  w  -  x  -  2.67\\
 t  +  0.5*sin(u)  +  v  +  w  -  y  -  1.07\\
@@ -245,7 +249,7 @@ t  +  0.5*u  +  v  +  sin(w)  -  y  -  0.79
 
 因为\tref{tab:addlabel}为$6\times 6$的数表，故可设:
 \[{t_i} = ih\qquad(i = 0,1, \cdots ,5)\]
-\[{u_i} = j\tau\qquad(j = 0,1, \cdots ,5)\footnote{其中,$h = 0.2 ,\tau  = 0.4$}\]
+\[{u_i} = j\tau\qquad(j = 0,1, \cdots ,5)\footnote{其中:$h = 0.2 ,\tau  = 0.4$}\]
 
 对于给定的$(t,u)$,如果$(t,u)$满足：
 \[{t_i} - \dfrac{h}{2} < t \le {t_i} + \dfrac{h}{2},\qquad 2 \le i \le 3\]
@@ -299,50 +303,75 @@ p(x,y) = \sum_{r = 0}^M \sum_{s = 0}^N c_{rs}\varphi_{r}(x)\psi_{s}(y)
 \end{equation}
  
 若参数$\{ c^{\ast}_{rs}\}$使得
-\[\sum\limits_{i = 0}^{m} {\sum\limits_{j = 0}^{n} \left[{\sum_{r = 0}^M \sum_{s = 0}^N c^{\ast}_{rs}\varphi_{r}(x_i)\psi_{s}(y_j) - u_{ij}}\right]^2} =min\]
-成立，则称相应曲面$p^{\ast}(x,y)$为在曲面族(\ref{qm})中按最小二乘原则确定的
+\begin{equation}
+\label{cost}
+L(\bm{C})=\sum\limits_{i = 0}^{m} {\sum\limits_{j = 0}^{n} \left[{\sum_{r = 0}^M \sum_{s = 0}^N c_{rs}\varphi_{r}(x_i)\psi_{s}(y_j) - u_{ij}}\right]^2} 
+\end{equation}
+在$\bm{C}=\bm{C}^{\ast}$处取到最小值$L(\bm{C}^{\ast})$，则称相应曲面$p^{\ast}(x,y)$为在曲面族(\ref{qmz})中按
+\textcolor{blue}{最小二乘原则}确定的
 对于数据(\ref{data})的拟合曲面。
 
-可证得\footnote{在讨论中，我将给出一种与教材不一样的证明方法}，拟合曲面的系数矩阵为
+设：
+\[\bm{B} =\big[\varphi_{r}(x_i)\big]_{(m+1)\times (M+1)}\]
+\[\bm{G} =\big[\psi_{s}(y_j)\big]_{(n+1)\times (N+1)}\]
+\[\bm{U} =\big[u_{ij}\big]_{(m+1)\times (n+1)}\]
+\[\bm{C} =\big[c_{rs}\big]_{(M+1)\times (N+1)}\]
+
+可证得\footnote{在\hyperref[sec:discuss]{第五章}的讨论中，我将给出一种与教材不一样的证明方法}，拟合曲面的系数矩阵为
 \begin{equation}
 \label{c}
 \bm{C}=(\bm{B}^T\bm{B})^{-1}\bm{B}^T\bm{U}\bm{G}(\bm{G}^T\bm{G})^{-1}
 \end{equation}
 
-
-\[\bm{B} =\big[\varphi_{r}(x_i)\big]_{(m+1)\times (M+1)}=
+在本实验中:
+\[\bm{B}=
 \begin{bmatrix}
-{\varphi_{0}(x_0)}&{\varphi_{1}(x_0)}& \cdots &{\varphi_{M}(x_0)}\\
-{\varphi_{0}(x_1)}&{\varphi_{1}(x_1)}& \cdots &{\varphi_{M}(x_1)}\\
- \vdots & \vdots & \ddots & \vdots \\
-{\varphi_{0}(x_m)}&{\varphi_{1}(x_m)}& \cdots &{\varphi_{M}(x_m)}\\
-\end{bmatrix}\]
+1&{x_0}&{x_0}^{2}& \cdots &{x_0}^{k}\\
+1&{x_1}&{x_1}^{2}& \cdots &{x_1}^{k}\\
+ \vdots & \vdots & \vdots & \ddots & \vdots \\
+1&{x_{10}}^2&{x_{10}}^{2}& \cdots &{x_{10}}^{k}\\
+\end{bmatrix}_{11\times (k+1)}\]
+\[\bm{G}=
+\begin{bmatrix}
+1&{y_0}&{y_0}^{2}& \cdots &{y_0}^{k}\\
+1&{y_1}&{y_1}^{2}& \cdots &{y_1}^{k}\\
+ \vdots & \vdots & \vdots & \ddots & \vdots \\
+1&{y_{20}}^2&{y_{20}}^{2}& \cdots &{y_{20}}^{k}\\
+\end{bmatrix}_{21\times (k+1)}\]
 
-\[U = \begin{bmatrix}
-{{z_{0,0}}}&{{z_{0,1}}}& \cdots &{{z_{0,20}}}\\
-{{z_{1,0}}}&{{z_{1,1}}}& \cdots &{{z_{1,20}}}\\
-{{z_{2,0}}}&{{z_{2,1}}}& \cdots &{{z_{1,20}}}\\
- \vdots & \vdots & \ddots & \vdots \\
-{{z_{10,0}}}&{{z_{10,1}}}& \cdots &{{z_{10,20}}}
-\end{bmatrix}\]
+\[\bm{U} =
+\big[u_{ij}\big]_{(m+1)\times (M+1)}=
+\big[z_{ij}\big]_{11\times 21}=
+\big[f(x_i,y_j)\big]_{11\times 21}
+\]
 
+在计算(\ref{c})式时，需要求矩阵的逆，此处可采用Gauss消元法。
+
+解出$c_{rs}^{k}$后，可得：
+\[p^{(k)}(x,y) = \sum\limits_{r,s = 0}^k {{c_{rs}^{k}}{x^r}{y^s}} \]
+
+
+
+其算法如下：\footnote{为什么写成这样的矩阵形式将在\hyperref[sec:discuss]{第五章}中说明}
+
+\begin{algorithm}[h]  
+\caption{Surface Fitting }  
+\begin{algorithmic}[1]  
+\STATE Set $k=0,\sigma=1$
+\WHILE {$\sigma >\varepsilon$}
+\STATE Compute $\bm{C}=(\bm{B}^T\bm{B})^{-1}\bm{B}^T\bm{U}\bm{G}(\bm{G}^T\bm{G})^{-1}$ 
+\STATE Compute $\bm{P}=\bm{B}\bm{C}\bm{G}^T$ 
+\STATE Compute $\sigma={\|{\bm{P}-\bm{U}}\|_{E}^2}$
+\STATE k=k+1
+\IF {$k>N$}
+\STATE \textbf{Break}
+\ENDIF 
+\ENDWHILE
+\end{algorithmic}  
+\end{algorithm}  
 
 \newpage
-\chapter{问题求解}
-\begin{enumerate}
-\item 初始化定义$A$矩阵
 
-\item 采用$Householder$变化将$A$矩阵拟上三角化得到矩阵$A^{n-1}$
-
-\item 采用$QR$分解将矩阵$A^{n-1}$分解为矩阵Q与R，并打印RQ
-
-\item 用带双步位移的QR方法求解所有特征值
-
-\item 用Gauss消去法求解$(A-\lambda I)X=0$,得到对应的特征向量
-
-\item 输出
-\end{enumerate}
-\newpage
 
 
 \chapter{源程序}
@@ -448,34 +477,52 @@ $\lambda_{10}= 3.389613438816e+000$
 Eigenvector=(-0.104872,\quad -0.217677,\quad -0.474694,\quad -0.259384,\quad -0.304665,\quad -0.259452,\quad 0.086866,\quad 0.405258,\quad 0.509628,\quad 0.239515)
 
 \chapter{讨论}
-\normalsize
-1.在对$n\times n$实矩阵$\bm{A}$作QR分解或双步位移分解时不需要形成具体的矩阵$\bm{H}_i$，这样可以避免矩阵与矩阵相乘，大大减少了计算量。
+\label{sec:discuss}
+在\hyperref[sec:qmnh]{曲面拟合}中:
 
-2.在QR分解中，R矩阵可以直接储存在A的上三角部分，而在$M_k$的QR分解中，不需要再生成$\bm{B},\bm{C}$矩阵，直接在$\bm{M},\bm{A}$矩阵中迭代即可，以节约储存空间。
+\[\bm{B} =\big[\varphi_{r}(x_i)\big]_{(m+1)\times (M+1)}=
+\begin{bmatrix}
+{\varphi_{0}(x_0)}&{\varphi_{1}(x_0)}& \cdots &{\varphi_{M}(x_0)}\\
+{\varphi_{0}(x_1)}&{\varphi_{1}(x_1)}& \cdots &{\varphi_{M}(x_1)}\\
+ \vdots & \vdots & \ddots & \vdots \\
+{\varphi_{0}(x_m)}&{\varphi_{1}(x_m)}& \cdots &{\varphi_{M}(x_m)}\\
+\end{bmatrix}\]
 
-3.QR方法适用于计算一般实矩阵的全部特征值，但对于大型实矩阵，则收敛速度不够用了，这时我们为了加速收敛，可以引入位移量,通常, 位移越离特征值越近,收敛速度就越快，如果位移$\sigma$与某个特征值非常接近, 则$\bm{A}_{n,n}^{(k)}-\sigma$就非常接近于0.
-这说明$\bm{A}_{n,n}^{(k)}$通常会首先收敛到$\bm{A}$的一个特征值.所以令$\sigma=\bm{A}_{n,n}^{(k)}$是一个不错的选择.
-但是, 如果这个特征值是复数, 这种位移选取方法就可能失效.
+\[\bm{G} =\big[\psi_{s}(y_j)\big]_{(n+1)\times (N+1)}=
+\begin{bmatrix}
+{\psi_{0}(y_0)}&{\psi_{1}(y_0)}& \cdots &{\psi_{N}(y_0)}\\
+{\psi_{0}(y_1)}&{\psi_{1}(y_1)}& \cdots &{\psi_{N}(y_1)}\\
+ \vdots & \vdots & \ddots & \vdots \\
+{\psi_{0}(y_n)}&{\psi_{1}(y_n)}& \cdots &{\psi_{N}(y_n)}\\
+\end{bmatrix}\]
 
-假设$\sigma \in \mathbb{C}$是 $\bm{A}$ 的某个复特征值 $\lambda$ 的一个很好的近似, 则其共轭$\overline{\sigma}$也应
-该是$\overline{\lambda}$的一个很好的近似. 因此我们可以考虑\qd{双位移策略}, 即先以$\sigma$为位移迭代一次, 然后再以$\overline{\sigma}$ 为位移迭代一次, 如此不断交替进行迭代.
-这样就有
-\begin{align*}
-A_1-\sigma I&=Q_1R_1, \\
-A_2&=R_1Q_1+\sigma I,\\
-A_2-\overline{\sigma}I&=Q_2R_2, \\
-A_3&=R_2Q_2+\overline{\sigma}I.
-\end{align*}
-容易验证
-\[A_3=Q_2^TA_2Q_2=Q_2^{\ast}Q_1^{\ast}A_1Q_1Q_2=Q^{\ast}A_1Q,
-\]
-其中$Q=Q_1Q_2$.
+\[\bm{C} =\big[c_{rs}\big]_{(M+1)\times (N+1)}\]
 
-我们注意到$\sigma$可能是复的, 所以 $Q_1$ 和 $Q_2$ 都可能是复矩阵. 但我们却可以
-选取适当的 $Q_1$ 和 $Q_2$, 使的 $Q=Q_1Q_2$ 是实正交矩阵
-从而$A_3 = Q^T A_1Q $也是实矩阵. 因此我们无需计算 $A_2$, 而是直接由 $A_1$ 计算出$A_3$.
+我们仔细观察上面的三个矩阵，可以发现:如果将$c_{rs}\varphi_{r}(x_i)\psi_{s}(y_j)$排成一个$(m+1)\times (n+1)$的矩阵$\bm{P}$，那么这个矩阵可以拆分成矩阵$\bm{B},\bm{C},\bm{G}^T$的乘积。\footnote{在$k<N$的情况下，它都成立}
 
-4.最后，在用Gauss消去法求解$(A-\lambda I)X=0$,求得到对应的特征向量
-时,需要将$X[n]$预设为1，因为由于线性方程组$AX=b$中的$b$向量全为0，所以解的自由度为1，需要自己先将$X[n]$的值定下来，才能迭代出剩下的解，不然求出的的解全为0.
+
+\begin{equation}
+\Big[c_{rs}\varphi_{r}(x_i)\psi_{s}(y_j) \Big]_{(m+1)\times (n+1)}=\bm{P}=\bm{B}\bm{C}\bm{G}^T
+\end{equation}
+
+
+而式(\ref{cost})则刚好为矩阵$\bm{B}\bm{C}\bm{G}^T-\bm{U}$的Euclid---范数的平方,即：
+\begin{equation}
+L(\bm{C})={\|{\bm{B}\bm{C}\bm{G}^T-\bm{U}}\|_{E}^2}
+\end{equation}
+
+如果我们想让$L(\bm{C})$取最小值，首先想到的是使$L(\bm{C})$在$\bm{C}^{\ast}$处的导数$L(\bm{C}^{\ast})=0$，于是
+这时我们用矩阵的求导法则，对$L(\bm{C})$求关于$\bm{C}$的偏导，得:
+\begin{equation}
+\label{lc}
+\dfrac{\partial L}{\partial \bm{C}}=2\bm{B}^T(\bm{B}\bm{C}\bm{G}^T-\bm{U})\bm{G}
+\end{equation}
+
+当式(\ref{lc})为0时，解得：
+\begin{equation}
+\bm{C}=(\bm{B}^T\bm{B})^{-1}\bm{B}^T\bm{U}\bm{G}(\bm{G}^T\bm{G})^{-1}
+\end{equation}
+这和式(\ref{c})是相同的，于是我们找到了一种更简洁的方法证明了这个结论。
+
 
 \end{document}
