@@ -249,11 +249,11 @@ t  +  0.5*u  +  v  +  sin(w)  -  y  -  0.79
 
 因为\tref{tab:addlabel}为$6\times 6$的数表，故可设:
 \[{t_i} = ih\qquad(i = 0,1, \cdots ,5)\]
-\[{u_i} = j\tau\qquad(j = 0,1, \cdots ,5)\footnote{其中:$h = 0.2 ,\tau  = 0.4$}\]
+\[{u_i} = j\tau\qquad(j = 0,1, \cdots ,5)\footnote{其中:$\quad h = 0.2 ,\tau  = 0.4$}\]
 
 对于给定的$(t,u)$,如果$(t,u)$满足：
-\[{t_i} - \dfrac{h}{2} < t \le {t_i} + \dfrac{h}{2},\qquad 2 \le i \le 3\]
-\[{u_j} - \frac{\tau }{2} < u \le {u_j} + \frac{\tau }{2},\qquad  2 \le j \le 3\]
+\[{t_i} - \dfrac{h}{2} < t \le {t_i} + \dfrac{h}{2},\footnote{计算$i,j$时有个小技巧:可取$i=\lfloor \dfrac{t}{h}+0.5\rfloor h$}\qquad2 \le i \le 3\]
+\[{u_j} - \frac{\tau }{2} < u \le {u_j} + \frac{\tau }{2},\footnote{同样的，$j=\lfloor \dfrac{u}{\tau}+0.5\rfloor \tau$}\qquad  2 \le j \le 3\]
 那么应选择$({t_k},{u_r})\quad(k = i - 1,i,i + 1;r = j - 1,j,j + 1)$为插值节点。
 
 若$t$满足：
@@ -317,7 +317,7 @@ L(\bm{C})=\sum\limits_{i = 0}^{m} {\sum\limits_{j = 0}^{n} \left[{\sum_{r = 0}^M
 \[\bm{U} =\big[u_{ij}\big]_{(m+1)\times (n+1)}\]
 \[\bm{C} =\big[c_{rs}\big]_{(M+1)\times (N+1)}\]
 
-可证得\footnote{在\hyperref[sec:discuss]{第五章}的讨论中，我将给出一种与教材不一样的证明方法}，拟合曲面的系数矩阵为
+可证得\footnote{在\hyperref[sec:discuss]{第五章}的讨论中，本文将给出一种与教材不同的证明方法}，拟合曲面的系数矩阵为
 \begin{equation}
 \label{c}
 \bm{C}=(\bm{B}^T\bm{B})^{-1}\bm{B}^T\bm{U}\bm{G}(\bm{G}^T\bm{G})^{-1}
@@ -352,7 +352,7 @@ L(\bm{C})=\sum\limits_{i = 0}^{m} {\sum\limits_{j = 0}^{n} \left[{\sum_{r = 0}^M
 
 
 
-其算法如下：\footnote{为什么写成这样的矩阵形式将在\hyperref[sec:discuss]{第五章}中说明}
+其算法如下：\footnote{写成这样的矩阵形式能有更直观的理解，详细请参看\hyperref[sec:discuss]{第五章}}
 
 \begin{algorithm}[h]  
 \caption{Surface Fitting }  
@@ -403,14 +403,7 @@ int main(){
 	QR(a,Q);
 	printf("\nR:\n");
 	output(a);
-	printf("\nQ:\n");
-	output(Q);
-	memset(B,0,sizeof(B));
-	MatirixM_M(a,Q);
-	printf("\nR*Q:\n");
-	output(B);
-	def();
-	DQR(a);
+
 	return 0;
 }
 \end{lstlisting}
@@ -420,10 +413,8 @@ int main(){
 
 \chapter{计算结果}
 后面为输出结果:
-\newpage
 
 
-\newpage
 特征值与向量如下:
 
 $\lambda_{1}= 9.432879572769e-001$ 
@@ -457,28 +448,57 @@ $\lambda_{6}= -1.493147080915e+000$
 Eigenvector=(-0.561341,\quad 0.778192,\quad 0.014364,\quad -0.277602,\quad 0.003568,\quad -0.002548,\quad -0.022061,\quad -0.011758,\quad -0.013173,\quad 0.035016)
 
 
-\vbox{}
-$\lambda_{7}= 1.590313458807e+000$ 
 
-Eigenvector=(0.062377,\quad -0.011231,\quad -0.252846,\quad -0.130988,\quad -0.381985,\quad 0.815575,\quad -0.123377,\quad -0.067721,\quad 0.271945,\quad 0.100282)
-
-
-\vbox{}
-$\lambda_{8}= -2.336865932238e+000$+ i*8.934379210213e-001
-
-
-\vbox{}
-$\lambda_{9}= -2.336865932238e+000$- i*8.934379210213e-001
-
-
-\vbox{}
-$\lambda_{10}= 3.389613438816e+000$ 
-
-Eigenvector=(-0.104872,\quad -0.217677,\quad -0.474694,\quad -0.259384,\quad -0.304665,\quad -0.259452,\quad 0.086866,\quad 0.405258,\quad 0.509628,\quad 0.239515)
 
 \chapter{讨论}
 \label{sec:discuss}
-在\hyperref[sec:qmnh]{曲面拟合}中:
+\section{向量求导在曲线拟合中的应用}
+在曲线拟合中，我发现如果应用向量的求导法则，那么能大大简化证明的过程.
+
+首先给出条件:
+\[\bm{c}=(c_0,c_1,\cdots,c_n)^T\]
+\[\bm{y}=(y_0,y_1,\cdots,y_m)^T\]
+\[\bm{A} =
+\begin{bmatrix}
+{\varphi_{0}(x_0)}&{\varphi_{1}(x_0)}& \cdots &{\varphi_{k}(x_0)}\\
+{\varphi_{0}(x_1)}&{\varphi_{1}(x_1)}& \cdots &{\varphi_{k}(x_1)}\\
+ \vdots & \vdots & \ddots & \vdots \\
+{\varphi_{0}(x_m)}&{\varphi_{1}(x_m)}& \cdots &{\varphi_{k}(x_m)}\\
+\end{bmatrix}\]
+
+
+然后我们将误差函数写成向量相乘的形式:
+\begin{align}
+\label{511}
+\bm{F}(\bm{c})&=\sum_{i=0}^m\big[f(x_i)-
+\sum_{k=0}^nc_k\varphi_{k}(x_i)\big]^2\\
+&=
+(\bm{y}-\bm{A}\bm{c})^T(\bm{y}-\bm{A}\bm{c})\\
+&=
+\bm{y}^T\bm{y}-2\bm{c}^T\bm{A}^T\bm{y}+C^T\bm{A}^T\bm{A}\bm{c}
+\end{align}
+
+然后应用向量求导法则，令其关于$\bm{c}$的偏导为0
+\begin{align}
+\dfrac{\partial \bm{F}}{\partial \bm{c}}&=
+-2\bm{A}^TY+2\bm{A}^T\bm{A}\bm{c}=0
+\end{align}
+
+即可解得所求的$\bm{c}$：
+\begin{equation}
+\label{ccc}
+\boxed{
+\bm{c}=(\bm{A}^T\bm{A})^{-1}\bm{A}^T\bm{y}
+}
+\end{equation}
+
+
+\section{矩阵求导在曲面拟合中的应用}
+收到之前的启发，我开始思考，在\hyperref[sec:qmnh]{曲面拟合}中，也能用类似的方法简化流程吗？
+
+在翻阅了一些关于矩阵求导的资料后，我开始了尝试，最后成功得出了相同的结果，这是将曲线拟合从一维推广到二维的情况，只要我们注意观察比较，就能发现其中的相似之处并得到启发，而且如果关于矩阵的掌握熟练的话，那么计算的过程将会更简单自然。
+
+首先受到式(\ref{511})的启发，我们第一步应该尝试着将误差函数转化为矩阵乘积的形式:
 
 \[\bm{B} =\big[\varphi_{r}(x_i)\big]_{(m+1)\times (M+1)}=
 \begin{bmatrix}
@@ -502,7 +522,8 @@ Eigenvector=(-0.104872,\quad -0.217677,\quad -0.474694,\quad -0.259384,\quad -0.
 
 
 \begin{equation}
-\Big[c_{rs}\varphi_{r}(x_i)\psi_{s}(y_j) \Big]_{(m+1)\times (n+1)}=\bm{P}=\bm{B}\bm{C}\bm{G}^T
+\label{51}
+\Big[\varphi_{r}(x_i)c_{rs}\psi_{s}(y_j) \Big]_{(m+1)\times (n+1)}=\bm{P}=\bm{B}\bm{C}\bm{G}^T
 \end{equation}
 
 
@@ -511,18 +532,47 @@ Eigenvector=(-0.104872,\quad -0.217677,\quad -0.474694,\quad -0.259384,\quad -0.
 L(\bm{C})={\|{\bm{B}\bm{C}\bm{G}^T-\bm{U}}\|_{E}^2}
 \end{equation}
 
-如果我们想让$L(\bm{C})$取最小值，首先想到的是使$L(\bm{C})$在$\bm{C}^{\ast}$处的导数$L(\bm{C}^{\ast})=0$，于是
+我们想让$L(\bm{C})$取最小值，这时应该使$L(\bm{C})$在$\bm{C}^{\ast}$处的导数$L(\bm{C}^{\ast})=0$，于是
 这时我们用矩阵的求导法则，对$L(\bm{C})$求关于$\bm{C}$的偏导，得:
 \begin{equation}
 \label{lc}
-\dfrac{\partial L}{\partial \bm{C}}=2\bm{B}^T(\bm{B}\bm{C}\bm{G}^T-\bm{U})\bm{G}
+\boxed{
+\dfrac{\partial L}{\partial \bm{C}}=2\bm{B}^T(\bm{B}\bm{C}\bm{G}^T-\bm{U})\bm{G}}
 \end{equation}
+
+
+
+关于式(\ref{lc})的证明如下:
+\begin{align}
+L(\bm{C})&={\|{\bm{B}\bm{C}\bm{G}^T-\bm{U}}\|_{E}^2}\\
+&=\sum\limits_{i = 0}^{m} {\sum\limits_{j = 0}^{n} \Bigg[{\sum_{r = 0}^M \sum_{s = 0}^N 
+\varphi_{r}(x_i)c_{rs}\psi_{s}(y_j) - u_{ij}}\Bigg]^2} 
+\end{align}
+
+\begin{align}
+\dfrac{\partial L}{\partial c_{rs}}&=
+2\sum\limits_{i = 0}^{m} \sum\limits_{j = 0}^{n} \Big[\psi_{s}(y_j)\varphi_{r}(x_i)c_{rs}\psi_{s}(y_j)\varphi_{r}(x_i)-\psi_{s}(y_j) u_{ij}\varphi_{r}(x_i)\Big] \\
+&=
+2\sum\limits_{i = 0}^{m} \sum\limits_{j = 0}^{n} \psi_{s}(y_j)[\varphi_{r}(x_i)c_{rs}\psi_{s}(y_j)]\varphi_{r}(x_i)-
+2\sum\limits_{i = 0}^{m} \sum\limits_{j = 0}^{n}\psi_{s}(y_j) u_{ij}\varphi_{r}(x_i)
+\label{58}
+\end{align}
+
+\begin{align}
+\label{59}
+\Big[\dfrac{\partial L}{\partial c_{rs}}\Big]_{(M+1)\times (N+1)}&=2\bm{B}^T(\bm{B}\bm{C}\bm{G}^T)\bm{G}-2\bm{B}^T\bm{U}\bm{G}
+\end{align}
+我们可以发现式(\ref{58})到式(\ref{59})的转化和式(\ref{51})是类似的。
 
 当式(\ref{lc})为0时，解得：
 \begin{equation}
+\label{cc}
 \bm{C}=(\bm{B}^T\bm{B})^{-1}\bm{B}^T\bm{U}\bm{G}(\bm{G}^T\bm{G})^{-1}
 \end{equation}
 这和式(\ref{c})是相同的，于是我们找到了一种更简洁的方法证明了这个结论。
+
+
+可见，如果我们能掌握一些关于矩阵求导的知识，在数值分析中对简化运算是有非常大帮助的。
 
 
 \end{document}
