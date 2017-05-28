@@ -1,0 +1,25 @@
+\ttl@starttoc {default@1}
+\contentsline {chapter}{\numberline {1}题目}{2}{chapter.1}
+\ttl@stoptoc {default@1}
+\ttl@starttoc {default@2}
+\contentsline {chapter}{\numberline {2}算法设计方案}{3}{chapter.2}
+\ttl@stoptoc {default@2}
+\ttl@starttoc {default@3}
+\contentsline {section}{\numberline {2.1}Householder变换}{3}{section.2.1}
+\contentsline {section}{\numberline {2.2}QR分解}{5}{section.2.2}
+\contentsline {section}{\numberline {2.3}带位移的QR迭代}{6}{section.2.3}
+\contentsline {chapter}{\numberline {3}问题求解}{7}{chapter.3}
+\ttl@stoptoc {default@3}
+\ttl@starttoc {default@4}
+\contentsline {chapter}{\numberline {4}源程序}{9}{chapter.4}
+\ttl@stoptoc {default@4}
+\ttl@starttoc {default@5}
+\contentsline {section}{\numberline {4.1}C语言版大作业}{9}{section.4.1}
+\contentsline {section}{\numberline {4.2}MATLAB版QR分解}{17}{section.4.2}
+\contentsline {chapter}{\numberline {5}计算结果}{18}{chapter.5}
+\ttl@stoptoc {default@5}
+\ttl@starttoc {default@6}
+\contentsline {chapter}{\numberline {6}讨论}{24}{chapter.6}
+\ttl@stoptoc {default@6}
+\ttl@starttoc {default@7}
+\contentsfinish 

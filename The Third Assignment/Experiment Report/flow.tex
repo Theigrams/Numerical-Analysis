@@ -1,0 +1,44 @@
+
+\input{Head}
+%\documentclass{article}
+\usepackage{lscape}
+\usepackage{amsmath,amssymb}
+\usepackage{pst-blur}
+\usepackage{pstricks-add}
+\definecolor{Blue}{rgb}{1.,0.75,0.8}
+\pagestyle{empty}
+
+\begin{document}
+\psset{shadowcolor=black!70,shadowangle=-90,blur,shortput=nab}
+%\begin{landscape}
+\begin{psmatrix}[rowsep=1.3,colsep=0.1]
+
+   \psovalbox[fillstyle=solid, fillcolor=yellow!50,shadow=true]{Start} \\
+   \psframebox[fillcolor=green!50,shadow=true]{创建$11\times 12$的初始数据点集$\{(x_i,y_j)\}$}  \\
+	 \psframebox[fillcolor=green!50,shadow=true]{将$\{(x_i,y_j)\}$代入方程组，并用Newton法解出对应的$t_{ij},u_{ij}$}  \\
+	 \psframebox[fillcolor=green!50,shadow=true]{对数表$z(t,u)$进行分片二次代数插值,
+求得$z_{ij}=f(t_{ij},u_{ij})$}  \\
+	\psframebox[fillcolor=green!50,shadow=true]{
+	%根据已有数据集$D=\{(x_i,y_j),z_{ij}\}$,
+对$z=f(x,y)$进行曲面拟合，得$p(x,y)$}  \\
+
+   \psdiabox[fillstyle=solid, fillcolor=magenta!50,shadow=true]{$\sigma \le 10^{-7}$} &
+     \psframebox[fillcolor=green!50,shadow=true]{$k=k+1$}  \\
+     
+   \psframebox[fillcolor=green!50,shadow=true]{创建新的$8\times 5$点集$\{(x^{\ast},y^{\ast})\}$,并计算$f(x^{\ast},y^{\ast}),p(x^{\ast},y^{\ast})$}  \\
+    \psparallelogrambox[fillstyle=solid,fillcolor=blue!50, shadow=true]{输出结果} \\
+     \psovalbox[fillstyle=solid, fillcolor=yellow!50,shadow=true]{End}
+\end{psmatrix}
+\ncline{->}{1,1}{2,1}
+\ncline{->}{2,1}{3,1}
+\ncline{->}{3,1}{4,1}
+\ncline{->}{4,1}{5,1}
+\ncline{->}{5,1}{6,1}
+\ncline{->}{6,1}{6,2}^{\textcolor{red}{No}}
+\ncline{->}{6,1}{7,1}_{\textcolor{red}{Yes}}
+\ncline{->}{7,1}{8,1}
+\ncline{->}{8,1}{9,1}
+\ncangles{->}{6,2}{5,1}
+
+%\end{landscape}
+\end{document}

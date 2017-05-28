@@ -1,0 +1,481 @@
+\input{Head}
+\usepackage{algorithm}
+\usepackage{amsmath,bm}
+\usepackage{algorithmic}
+\usepackage{fancybox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{diagbox}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{empheq}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{mathtools}
+
+\definecolor{ocre}{RGB}{243,102,25}
+\definecolor{mygray}{RGB}{243,243,244}
+
+\newcommand*\mymathbox[1]{%
+  \fcolorbox{ocre}{mygray}{\hspace{1em}#1\hspace{1em}}}
+
+\newtheoremstyle{mystyle}
+  {\topsep}
+  {\topsep}
+  {\normalfont}
+  {}
+  {\sffamily\bfseries}
+  {.}
+  {.5em}
+  {{\color{ocre}\thmname{#1}~\thmnumber{#2}}\thmnote{\,--\,#3}}%
+\theoremstyle{mystyle}
+\newmdtheoremenv[
+  backgroundcolor=mygray,
+  linecolor=ocre,
+  leftmargin=20pt,
+  innerleftmargin=0pt,
+  innerrightmargin=0pt,
+  ]{theo}{Theorem}[section]
+
+\lstset{
+columns=flexible,
+numbers=left,
+numberstyle=\footnotesize\color{darkgray}, 
+basicstyle=\small\ttfamily,
+stringstyle=\color{purple},
+keywordstyle=\color[RGB]{40,40,255}\bfseries,
+commentstyle=\it\color[RGB]{0,96,96},  
+stringstyle=\rmfamily\slshape\color[RGB]{128,0,0}, 
+showstringspaces=false,      
+% directivestyle=\color{blue},
+frame=shadowbox,
+%framerule=0pt,
+backgroundcolor=\color[RGB]{245,245,244},
+escapeinside=``, %逃逸字符(1左面的键)，用于显示中文
+breaklines,
+extendedchars=false,
+%解决代码跨页时，章节标题，页眉等汉字不显示的问题
+xleftmargin=2em,xrightmargin=2em,
+aboveskip=1em,%设置边距
+tabsize=4, %设置tab空格数  
+showspaces=false %不显示空格 
+rulesepcolor=\color{red!20!green!20!blue!20}
+%rulesepcolor=\color{brown}
+}
+
+
+\title{数值分析第三次大作业}
+\author{张晋\\学号：15091060}
+\date{最后更新于：\today}
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+
+\newpage
+
+\chapter{题目}
+关于$x,y,t,u,v,w$的下列方程组:
+
+\[\left\{ \begin{array}{l}
+0.5\cos t + u + v + w - x = 2.67\\
+t + 0.5\sin u + v + w - y = 1.07\\
+0.5t + u + \cos v + w - x = 3.74\\
+t + 0.5u + v + \sin w - y = 0.79
+\end{array} \right.\]
+
+以及关于$z, t, u$的下列二维数表确定了一个二元函数
+$z=f(x,y)$。
+\begin{table}[htbp]
+  \centering
+  \caption{二维数表}
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \diagbox{t}{z}{y}& 0     & 0.4   & 0.8   & 1.2   & 1.6   & 2 \\
+    \hline
+    0     & -0.5  & -0.34 & 0.14  & 0.94  & 2.06  & 3.5 \\
+    \hline
+    0.2   & -0.42 & -0.5  & -0.26 & 0.3   & 1.18  & 2.38 \\
+    \hline
+    0.4   & -0.18 & -0.5  & -0.5  & -0.18 & 0.46  & 1.42 \\
+    \hline
+    0.6   & 0.22  & -0.34 & -0.58 & -0.5  & -0.1  & 0.62 \\
+    \hline
+    0.8   & 0.78  & -0.02 & -0.5  & -0.66 & -0.5  & -0.02 \\
+    \hline
+    1     & 1.5   & 0.46  & -0.26 & -0.66 & -0.74 & -0.5 \\
+    \hline
+    \end{tabular}
+  \label{tab:addlabel}
+\end{table}
+
+\begin{enumerate}
+\item 试用数值方法求出$f(x, y)$在区域
+$D = \{ (x,y)|0 \le x \le 0.8,0.5 \le y \le 1.5\}$上的一个近似表达式：
+\[p(x,y) = \sum_{r = 0}^k\sum_{s = 0}^k {{c_{rs}}{x^r}{y^s}} \]
+要求$p(x,y)$最小的$k$值达到以下的精度：
+\[\sigma  = \sum\limits_{i = 0}^{10} {\sum\limits_{j = 0}^{20} {[f({x_i},{y_j}) - p} } ({x_i},{y_j}){]^2} \le {10^{ - 7}}\]
+其中，${x_i} = 0.08i,{y_j} = 0.5 + 0.05j$
+
+\item 计算$f(x_i^{\ast},y_j^{\ast}),p(x_i^{\ast},y_j^{\ast})\qquad (i = 1, 2,\cdots,8;j = 1,2,\cdots,5)$的值，以观察$p(x,y)$逼近$f(x,y)$的效果，其中,$x_i^{\ast}=0.1i,y_j^{\ast}=0.5+0.2j$
+\end{enumerate}
+
+
+\subsection*{说明:}
+\begin{enumerate}
+\item 用迭代方法求解非线性方程组时，要求近似解向量
+${\bm{x}^{(k)}}$满足以下精度
+\[\dfrac{\|{\bm{x}^{(k)}} - {\bm{x}^{(k - 1)}}\|_{\infty }}{\|{\bm{x}^{(k)}}\|_{\infty }} \le {10^{ - 12}}\]
+
+\item 作二元插值时，要使用分片二次代数插值。
+
+\item 要由程序自动确定最小的$k$值。
+
+\item 打印以下内容：
+
+\begin{enumerate}
+\item 全部源程序;
+
+\item 数表:$\{{x_i},{y_j},f({x_i},{y_j})\}\qquad (i = 0,1,2,\cdots,10;j = 0,1,2,\cdots,20)$;
+
+\item 选择过程的$k,\sigma$值;
+
+\item 达到精度要求时的$k$和$\sigma$值以及$p(x,y)$中的系数
+$c_{rs}(r = 0,1,\cdots,k;s = 0,1,\cdots,k)$;
+
+\item 数表:$\{x_i^{\ast},y_j^{\ast},f(x_i^{\ast},y_j^{\ast}),p(x_i^{\ast},y_j^{\ast})\}\qquad (i = 1, 2,\cdots,8;j = 1,2,\cdots,5)$。
+
+\end{enumerate}
+\item 采用$f$型输出$x_i,y_j,x_i^{\ast},y_j^{\ast}$的准确值，其余实型数采用$e$型输出并且至少显示12位有效数字。
+\end{enumerate}
+
+
+\newpage
+\chapter{算法设计方案}
+\section{方案}
+\begin{enumerate}
+\item 将${x_i} = 0.08i,{y_j} = 0.5 + 0.05j\quad (i=0,1,\cdots,10;j=0,1,\cdots,20)$代入非线性方程组(\ref{e1})中，用\hyperref[sec:Newton]{Newton迭代法}解出$t_{ij}$和$u_{ij}$;
+
+\item 对数表$z(t,u)$进行\hyperref[sec:Interpolation]{分片双二次插值},求得$z_{ij}=\hat{z}(t_{ij},u_{ij})$
+
+\item 根据$z_{ij}$的值进行\hyperref[sec:qmnh]{曲面拟合}，要求精度
+$\sigma \le 10^{-7}$
+,得拟合函数
+\[p(x,y) = \sum_{r = 0}^k\sum_{s = 0}^k {{c_{rs}}{x^r}{y^s}} \]
+
+\item 
+创建新的数据点集$x_i^{\ast}=0.1i,y_j^{\ast}=0.5+0.2j\quad (i = 1, 2,\cdots,8;j = 1,2,\cdots,5)$,
+并代入非线性方程组(\ref{e1})中，用\hyperref[sec:Newton]{Newton迭代法}解出$t^{\ast}$和$u^{\ast}$,
+再用\hyperref[sec:Interpolation]{分片双二次插值}计算出$f(x^{\ast},y^{\ast})$,将其与$p(x^{\ast},y^{\ast})$输出并观察比较。
+\end{enumerate}
+
+\newpage
+\begin{figure}[h]
+\small
+\centering
+\includegraphics[width=18cm]{flow1}
+\end{figure}
+
+\newpage
+\section{Newton迭代法}
+\label{sec:Newton}
+\begin{equation}
+\label{e1}
+\left\{ \begin{array}{l}
+0.5\cos t + u + v + w - x = 2.67\\
+t + 0.5\sin u + v + w - y = 1.07\\
+0.5t + u + \cos v + w - x = 3.74\\
+t + 0.5u + v + \sin w - y = 0.79
+\end{array} \right.
+\end{equation}
+
+
+对于该非线性方程组方程组来说，$x,y$为已知量，
+需解出$t,u,v,w$。
+
+设$\bm{x}= {(t,u,v,w)^T}$,并设定精度水平${\varepsilon } = {10^{ - 12}}$和最大迭代次数$M$
+
+先在${\bm{x}^{\ast}}$附近选取${\bm{x}^{(0)}}= {({t^{(0)}},{u^{(0)}},{v^{(0)}},{w^{(0)}})^T}$
+然后迭代\footnote{迭代的终止条件为$\|\Delta \bm{x}^{(k)}\|/\|\bm{x}^{(k+1)}\|\le \varepsilon$,若$k>M$时仍未达到迭代精度，则迭代失败。}:
+\[\bm{x}^{(k+1)}= \bm{x}^{(k)}-[\bm{F}'(\bm{x}^{(k))}]^{-1}\bm{F}(\bm{x}^{(k)})\]
+具体算法如下：
+\begin{algorithm}[h]  
+\caption{Newton's method}  
+\begin{algorithmic}[1]  
+\STATE Set $\bm{x}^{(0)}\in D$ and $k=0$
+\WHILE {k<M}
+\STATE Compute $\bm{F}(\bm{x}^{(k)})$ 
+and $\bm{F}'(\bm{x}^{(k)})$
+\STATE Compute $\Delta \bm{x}^{(k)}=-[\bm{F}'(\bm{x}^{(k))}]^{-1}\bm{F}(\bm{x}^{(k)})$
+\IF {$\|\Delta \bm{x}^{(k)}\|/\|\bm{x}^{(k+1)}\|\le \varepsilon$}
+\STATE $\bm{x}^{\ast}=\bm{x}^{(k)}$
+\STATE \textbf{Break}
+\ENDIF 
+\STATE $\bm{x}^{(k+1)}= \bm{x}^{(k)}+
+\Delta \bm{x}^{(k)}$
+\STATE k=k+1
+\ENDWHILE
+\end{algorithmic}  
+\end{algorithm}  
+
+其中，基于方程组(\ref{e1})的雅可比矩阵$\bm{F}(\bm{x}),\bm{F}'(\bm{x})$分别为：
+\[F(\bm{x}) = \left[ \begin{array}{l}
+0.5*cos(t)  +  u  +  v  +  w  -  x  -  2.67\\
+t  +  0.5*sin(u)  +  v  +  w  -  y  -  1.07\\
+0.5*t  +  u  +  cos(v)  +  w  -  x  -  3.74\\
+t  +  0.5*u  +  v  +  sin(w)  -  y  -  0.79
+\end{array} \right]\]
+
+\[F'(\bm{x}) = \left[ {\begin{array}{*{20}{c}}
+{ - 0.5*\sin (t)}&1&1&1\\
+1&{0.5*\cos (u)}&1&1\\
+{0.5}&1&{ - \sin (v)}&1\\
+1&{0.5}&1&{\cos (w)}
+\end{array}} \right]\]
+
+
+\newpage
+\section{分片双二次插值}
+\label{sec:Interpolation}
+前面我们将$\{(x_i,y_j)\}$代入非线性方程组(\ref{e1})中，然后用\hyperref[sec:Newton]{Newton迭代法}解出了$t_{ij}$和$u_{ij}$.
+
+在这一节中我们需要根据\tref{tab:addlabel}对$z(t,u)$进行分片双二次插值，求得$z_{ij}=\hat{z}(t_{ij},u_{ij})\qquad (i = 0,1,2,\cdots,10;j = 0,1,2,\cdots,20)$.
+
+因为\tref{tab:addlabel}为$6\times 6$的数表，故可设:
+\[{t_i} = ih\qquad(i = 0,1, \cdots ,5)\]
+\[{u_i} = j\tau\qquad(j = 0,1, \cdots ,5)\footnote{其中,$h = 0.2 ,\tau  = 0.4$}\]
+
+对于给定的$(t,u)$,如果$(t,u)$满足：
+\[{t_i} - \dfrac{h}{2} < t \le {t_i} + \dfrac{h}{2},\qquad 2 \le i \le 3\]
+\[{u_j} - \frac{\tau }{2} < u \le {u_j} + \frac{\tau }{2},\qquad  2 \le j \le 3\]
+那么应选择$({t_k},{u_r})\quad(k = i - 1,i,i + 1;r = j - 1,j,j + 1)$为插值节点。
+
+若$t$满足：
+\[t \le {t_1} + \frac{h}{2}\]
+或
+\[t > {t_4} + \frac{h}{2}\]
+则相应地选取$i=1$或$i=4$
+
+同样的，若$u$满足：
+\[u \le {u_1} + \frac{\tau }{2}\]
+或
+\[u> {u_4} + \frac{\tau }{2}\]
+则相应地选取$j=1$或$j=4$
+
+最后得到插值多项式为
+
+\begin{equation}
+\label{hz}
+\boxed{
+\hat{z}(t,u) = \sum\limits_{k = i - 1}^{i + 1} {\sum\limits_{r = j - 1}^{j + 1} {{l_k}} } (t){\tilde l_r}(u)z({t_k},{u_r}) }
+\end{equation}
+
+其中，
+\[{l_k}(t) = \prod\limits_{\substack{m= i - 1\\
+m \ne k}}^{i + 1} {\frac{{t - {t_m}}}{{{t_k} - {t_m}}}}\qquad (k = i - 1,i,i + 1)\]
+
+\[{{\tilde l}_r}(u) = \prod\limits_{\substack{n = j - 1\\
+n \ne r}}^{j + 1} {\frac{{u - {u_n}}}{{{u_r} - {u_n}}}} \qquad (r = j - 1,j,j + 1)\]
+
+\newpage
+\section{曲面拟合}
+\label{sec:qmnh}
+设在三维坐标系$Oxyu$中给定$(m+1)\times (n+1)$个点:
+\begin{equation}
+\label{data}
+\mathfrak{D}=\{(x_i,y_j),z_{ij}\}\qquad (i=0,1,\cdots,m;j=0,1,\cdots,n)
+\end{equation}
+选定$M+1$个$x$的函数
+$\{\varphi_{r}(x)\}_{r=0}^M$
+和$N+1$个$y$的函数
+$\{\psi_{s}(y)\}_{s=0}^N$
+
+以函数组$\{\varphi_{r}(x)\psi_{s}(y)\}\quad (r=0,1,\cdots,M;s=0,1,\cdots,N)$为基函数，构成以$\{c_{rs}\}$为参数的曲面族
+\begin{equation}
+\label{qmz}
+p(x,y) = \sum_{r = 0}^M \sum_{s = 0}^N c_{rs}\varphi_{r}(x)\psi_{s}(y)
+\end{equation}
+ 
+若参数$\{ c^{\ast}_{rs}\}$使得
+\[\sum\limits_{i = 0}^{m} {\sum\limits_{j = 0}^{n} \left[{\sum_{r = 0}^M \sum_{s = 0}^N c^{\ast}_{rs}\varphi_{r}(x_i)\psi_{s}(y_j) - u_{ij}}\right]^2} =min\]
+成立，则称相应曲面$p^{\ast}(x,y)$为在曲面族(\ref{qm})中按最小二乘原则确定的
+对于数据(\ref{data})的拟合曲面。
+
+可证得\footnote{在讨论中，我将给出一种与教材不一样的证明方法}，拟合曲面的系数矩阵为
+\begin{equation}
+\label{c}
+\bm{C}=(\bm{B}^T\bm{B})^{-1}\bm{B}^T\bm{U}\bm{G}(\bm{G}^T\bm{G})^{-1}
+\end{equation}
+
+
+\[\bm{B} =\big[\varphi_{r}(x_i)\big]_{(m+1)\times (M+1)}=
+\begin{bmatrix}
+{\varphi_{0}(x_0)}&{\varphi_{1}(x_0)}& \cdots &{\varphi_{M}(x_0)}\\
+{\varphi_{0}(x_1)}&{\varphi_{1}(x_1)}& \cdots &{\varphi_{M}(x_1)}\\
+ \vdots & \vdots & \ddots & \vdots \\
+{\varphi_{0}(x_m)}&{\varphi_{1}(x_m)}& \cdots &{\varphi_{M}(x_m)}\\
+\end{bmatrix}\]
+
+\[U = \begin{bmatrix}
+{{z_{0,0}}}&{{z_{0,1}}}& \cdots &{{z_{0,20}}}\\
+{{z_{1,0}}}&{{z_{1,1}}}& \cdots &{{z_{1,20}}}\\
+{{z_{2,0}}}&{{z_{2,1}}}& \cdots &{{z_{1,20}}}\\
+ \vdots & \vdots & \ddots & \vdots \\
+{{z_{10,0}}}&{{z_{10,1}}}& \cdots &{{z_{10,20}}}
+\end{bmatrix}\]
+
+
+\newpage
+\chapter{问题求解}
+\begin{enumerate}
+\item 初始化定义$A$矩阵
+
+\item 采用$Householder$变化将$A$矩阵拟上三角化得到矩阵$A^{n-1}$
+
+\item 采用$QR$分解将矩阵$A^{n-1}$分解为矩阵Q与R，并打印RQ
+
+\item 用带双步位移的QR方法求解所有特征值
+
+\item 用Gauss消去法求解$(A-\lambda I)X=0$,得到对应的特征向量
+
+\item 输出
+\end{enumerate}
+\newpage
+
+
+\chapter{源程序}
+\section{C语言版大作业}
+\begin{lstlisting}[language=C]
+#include<stdio.h>
+#include<math.h>
+#include<string.h>
+#define N 20
+const double eps=1e-12;
+double a[N][N],B[N][N],C[N][N];
+int n=10;
+
+typedef struct{
+//定义复数结构体
+    double Re;
+    double Im;
+}ComplexNumber;
+
+
+int main(){
+	double Q[N][N];
+	freopen("Works.in","r",stdin);
+	freopen("Works.out","w",stdout);
+	def();
+	Householder_Triangularization(a);
+	printf("A_n-1:\n");
+	output(a);
+	QR(a,Q);
+	printf("\nR:\n");
+	output(a);
+	printf("\nQ:\n");
+	output(Q);
+	memset(B,0,sizeof(B));
+	MatirixM_M(a,Q);
+	printf("\nR*Q:\n");
+	output(B);
+	def();
+	DQR(a);
+	return 0;
+}
+\end{lstlisting}
+
+
+
+
+\chapter{计算结果}
+后面为输出结果:
+\newpage
+
+
+\newpage
+特征值与向量如下:
+
+$\lambda_{1}= 9.432879572769e-001$ 
+
+Eigenvector=(0.079620,\quad 0.045421,\quad -0.018272,\quad -0.047961,\quad -0.349567,\quad 0.207215,\quad -0.152312,\quad 0.820634,\quad -0.355466,\quad 0.028866)
+
+
+\vbox{}
+$\lambda_{2}= 6.489488202110e-001$ 
+
+Eigenvector=(0.108435,\quad 0.071344,\quad 0.382502,\quad -0.047100,\quad -0.717804,\quad 0.181519,\quad -0.226006,\quad 0.388381,\quad 0.289696,\quad 0.024333)
+
+
+\vbox{}
+$\lambda_{3}= -9.891143464725e-001$+ i*1.084758631513e-001
+
+
+\vbox{}
+$\lambda_{4}= -9.891143464725e-001$- i*1.084758631513e-001
+
+
+\vbox{}
+$\lambda_{5}= 4.954990923624e-002$ 
+
+Eigenvector=(-0.213768,\quad -0.206774,\quad 0.386829,\quad -0.031112,\quad -0.380939,\quad -0.125174,\quad 0.644716,\quad -0.308201,\quad -0.295977,\quad 0.043723)
+
+
+\vbox{}
+$\lambda_{6}= -1.493147080915e+000$ 
+
+Eigenvector=(-0.561341,\quad 0.778192,\quad 0.014364,\quad -0.277602,\quad 0.003568,\quad -0.002548,\quad -0.022061,\quad -0.011758,\quad -0.013173,\quad 0.035016)
+
+
+\vbox{}
+$\lambda_{7}= 1.590313458807e+000$ 
+
+Eigenvector=(0.062377,\quad -0.011231,\quad -0.252846,\quad -0.130988,\quad -0.381985,\quad 0.815575,\quad -0.123377,\quad -0.067721,\quad 0.271945,\quad 0.100282)
+
+
+\vbox{}
+$\lambda_{8}= -2.336865932238e+000$+ i*8.934379210213e-001
+
+
+\vbox{}
+$\lambda_{9}= -2.336865932238e+000$- i*8.934379210213e-001
+
+
+\vbox{}
+$\lambda_{10}= 3.389613438816e+000$ 
+
+Eigenvector=(-0.104872,\quad -0.217677,\quad -0.474694,\quad -0.259384,\quad -0.304665,\quad -0.259452,\quad 0.086866,\quad 0.405258,\quad 0.509628,\quad 0.239515)
+
+\chapter{讨论}
+\normalsize
+1.在对$n\times n$实矩阵$\bm{A}$作QR分解或双步位移分解时不需要形成具体的矩阵$\bm{H}_i$，这样可以避免矩阵与矩阵相乘，大大减少了计算量。
+
+2.在QR分解中，R矩阵可以直接储存在A的上三角部分，而在$M_k$的QR分解中，不需要再生成$\bm{B},\bm{C}$矩阵，直接在$\bm{M},\bm{A}$矩阵中迭代即可，以节约储存空间。
+
+3.QR方法适用于计算一般实矩阵的全部特征值，但对于大型实矩阵，则收敛速度不够用了，这时我们为了加速收敛，可以引入位移量,通常, 位移越离特征值越近,收敛速度就越快，如果位移$\sigma$与某个特征值非常接近, 则$\bm{A}_{n,n}^{(k)}-\sigma$就非常接近于0.
+这说明$\bm{A}_{n,n}^{(k)}$通常会首先收敛到$\bm{A}$的一个特征值.所以令$\sigma=\bm{A}_{n,n}^{(k)}$是一个不错的选择.
+但是, 如果这个特征值是复数, 这种位移选取方法就可能失效.
+
+假设$\sigma \in \mathbb{C}$是 $\bm{A}$ 的某个复特征值 $\lambda$ 的一个很好的近似, 则其共轭$\overline{\sigma}$也应
+该是$\overline{\lambda}$的一个很好的近似. 因此我们可以考虑\qd{双位移策略}, 即先以$\sigma$为位移迭代一次, 然后再以$\overline{\sigma}$ 为位移迭代一次, 如此不断交替进行迭代.
+这样就有
+\begin{align*}
+A_1-\sigma I&=Q_1R_1, \\
+A_2&=R_1Q_1+\sigma I,\\
+A_2-\overline{\sigma}I&=Q_2R_2, \\
+A_3&=R_2Q_2+\overline{\sigma}I.
+\end{align*}
+容易验证
+\[A_3=Q_2^TA_2Q_2=Q_2^{\ast}Q_1^{\ast}A_1Q_1Q_2=Q^{\ast}A_1Q,
+\]
+其中$Q=Q_1Q_2$.
+
+我们注意到$\sigma$可能是复的, 所以 $Q_1$ 和 $Q_2$ 都可能是复矩阵. 但我们却可以
+选取适当的 $Q_1$ 和 $Q_2$, 使的 $Q=Q_1Q_2$ 是实正交矩阵
+从而$A_3 = Q^T A_1Q $也是实矩阵. 因此我们无需计算 $A_2$, 而是直接由 $A_1$ 计算出$A_3$.
+
+4.最后，在用Gauss消去法求解$(A-\lambda I)X=0$,求得到对应的特征向量
+时,需要将$X[n]$预设为1，因为由于线性方程组$AX=b$中的$b$向量全为0，所以解的自由度为1，需要自己先将$X[n]$的值定下来，才能迭代出剩下的解，不然求出的的解全为0.
+
+\end{document}
