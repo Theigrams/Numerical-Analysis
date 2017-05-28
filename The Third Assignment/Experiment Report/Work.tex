@@ -252,20 +252,20 @@ t  +  0.5*u  +  v  +  sin(w)  -  y  -  0.79
 \[{u_i} = j\tau\qquad(j = 0,1, \cdots ,5)\footnote{其中:$\quad h = 0.2 ,\tau  = 0.4$}\]
 
 对于给定的$(t,u)$,如果$(t,u)$满足：
-\[{t_i} - \dfrac{h}{2} < t \le {t_i} + \dfrac{h}{2},\footnote{计算$i,j$时有个小技巧:可取$i=\lfloor \dfrac{t}{h}+0.5\rfloor h$}\qquad2 \le i \le 3\]
-\[{u_j} - \frac{\tau }{2} < u \le {u_j} + \frac{\tau }{2},\footnote{同样的，$j=\lfloor \dfrac{u}{\tau}+0.5\rfloor \tau$}\qquad  2 \le j \le 3\]
+\[{t_i} - \dfrac{h}{2} < t \le {t_i} + \dfrac{h}{2},\footnote{计算$i,j$时有个小技巧:可取$i=\lfloor \dfrac{t}{h}+0.5\rfloor $}\qquad2 \le i \le 3\]
+\[{u_j} - \frac{\tau }{2} < u \le {u_j} + \frac{\tau }{2},\footnote{同样的，$j=\lfloor \dfrac{u}{\tau}+0.5\rfloor $}\qquad  2 \le j \le 3\]
 那么应选择$({t_k},{u_r})\quad(k = i - 1,i,i + 1;r = j - 1,j,j + 1)$为插值节点。
 
 若$t$满足：
 \[t \le {t_1} + \frac{h}{2}\]
 或
-\[t > {t_4} + \frac{h}{2}\]
+\[t > {t_3} + \frac{h}{2}\]
 则相应地选取$i=1$或$i=4$
 
 同样的，若$u$满足：
 \[u \le {u_1} + \frac{\tau }{2}\]
 或
-\[u> {u_4} + \frac{\tau }{2}\]
+\[u> {u_3} + \frac{\tau }{2}\]
 则相应地选取$j=1$或$j=4$
 
 最后得到插值多项式为

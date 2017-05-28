@@ -35,7 +35,7 @@ void Inverse(double A[N][N],double B[N][N]){
 	} 
 	for(int k=n;k;k--){
 		for(int i=n;i>k;i--){
-			m=a[k][i];
+			m=A[k][i];
 			for(int j=1;j<=n;j++){
 				A[k][j]-=m*A[i][j];
 				B[k][j]-=m*B[i][j];
