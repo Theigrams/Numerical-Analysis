@@ -17,6 +17,9 @@ void def(double a[N][N],double b[N]){
 void clear(double a[N][N],double b[N]){
 	memset(a,0,sizeof(a));
 	memset(b,0,sizeof(b));
+		for(int i=1;i<=n;i++)
+		for(int j=1;j<=n;j++)
+		a[i][j]=0;
 }
 void Q(){
 	double a[N][N],b[N];

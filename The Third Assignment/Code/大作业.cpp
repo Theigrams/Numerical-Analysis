@@ -17,19 +17,34 @@ void JF(double x,double y,double A[N][N]){
 	A[4][1]=1;	A[4][2]=0.5;	A[4][3]=1;	A[4][4]=cos(X[4]);
 }
 
-double Maxtrix_x(double a[N][N],double b[N][N],int c[N][N],int m,int p,int n){
+void clear(double a[N][N]){
+	for(int i=0;i<N;i++)
+		for(int j=0;j<N;j++)
+			a[i][j]=0;
+}
+
+void put(double a[N][N],int n,int m){
+	for(int i=1;i<=n;i++){
+		for(int j=1;j<=m;j++)
+			printf("C[%d][%d]=%.12e \n",i-1,j-1,a[i][j]);
+		printf("\n");
+	}
+	printf("\n");
+}
+
+double Maxtrix_x(double a[N][N],double b[N][N],double c[N][N],int m,int p,int n){
 	double s=0;
-	memset(c,0,sizeof(c));
+	clear(c);
 	for(int i=1;i<=m;i++)
 		for(int j=1;j<=n;j++)
-			for(int k=1;i<=p;p++)
+			for(int k=1;k<=p;k++)
 				c[i][j]+=a[i][k]*b[k][j];
 }
 
 void Inverse(double C[N][N],double B[N][N],double n){
 	double m,A[N][N];
-	memset(B,0,sizeof(B));
-	memset(A,0,sizeof(A));
+	clear(B);
+	clear(A);
 	for(int i=1;i<=n;i++)
 		for(int j=1;j<=n;j++)
 			A[i][j]=C[i][j];
@@ -60,10 +75,10 @@ void Inverse(double C[N][N],double B[N][N],double n){
 }
 
 void Transpose(double A[N][N],double B[N][N],int n,int m){
-	memset(B,0,sizeof(B));
+	clear(B);
 	for(int i=1;i<=n;i++)
 		for(int j=1;j<=m;j++)
-			B[i][j]=A[j][i];
+			B[j][i]=A[i][j];
 }
 
 double MaxX(double x[N],int n){
@@ -75,7 +90,7 @@ double MaxX(double x[N],int n){
 void Newton(double x,double y){
 	int n=4,k;
 	double eps=1e-12,max,A[N][N],Fx[N],B[N][N],dX[N];
-	for(k=1;k<=10000;k++){
+	for(k=1;k<=1000;k++){
 		memset(Fx,0,sizeof(Fx));
 		memset(B,0,sizeof(B));
 		memset(dX,0,sizeof(dX));
@@ -92,7 +107,7 @@ void Newton(double x,double y){
 			return ;
 		for(int i=1;i<=n;i++)X[i]-=dX[i];
 	}
-	printf("wrong!\n");
+//	printf("wrong!\n");
 }
 
 double Interpolation(double t,double u){
@@ -129,59 +144,74 @@ z[5][0]= 1.5 ; z[5][1]= 0.46; z[5][2]=-0.26; z[5][3]=-0.66; z[5][4]=-0.74;  z[5]
 	return sum;
 }
 
-double Surface_Fitting(double x[N],double y[N],double z[N][N],double C[N],[N],int k){
-	double B[N][N],G[N][N],I[N][N],J[N][N],sigma;
+double Surface_Fitting(double x[N],double y[N],double z[N][N],double C[N][N],int k){
+	double B[N][N],G[N][N],I[N][N],J[N][N],sigma=0;
 	for(int i=1;i<=11;i++)
 		for(int j=1;j<=k+1;j++)
-			B[i][j]=pow(x[i-1],j-1);
+			B[i][j]=pow(x[i],j-1);
 	for(int i=1;i<=21;i++)
 		for(int j=1;j<=k+1;j++)
-			G[i][j]=pow(y[i-1],j-1);
-	Transpose(B,I,11,k+1);
-	memset(J,0,sizeof(J));
+			G[i][j]=pow(y[i],j-1);
+
+	Transpose(B,I,11,k+1);	
 	Maxtrix_x(I,B,J,k+1,11,k+1);
-	memset(C,0,sizeof(C));
 	Inverse(J,C,k+1);
-	memset(J,0,sizeof(J));
 	Maxtrix_x(C,I,J,k+1,k+1,11);
-	memset(I,0,sizeof(I));
 	Maxtrix_x(J,z,I,k+1,11,21);
-	memset(J,0,sizeof(J));
 	Maxtrix_x(I,G,J,k+1,21,k+1);
-	memset(I,0,sizeof(I));
 	Transpose(G,I,21,k+1);
-	memset(C,0,sizeof(C));
 	Maxtrix_x(I,G,C,k+1,21,k+1);
-	memset(I,0,sizeof(I));
 	Inverse(C,I,k+1);
-	memset(C,0,sizeof(C));
-	Maxtrix_x(J,I,C,k+1,k+1,k+1);
+	Maxtrix_x(J,I,C,k+1,k+1,k+1);	
 	
-	
-}
-void output(){
-	for(int i=1;i<=4;i++)
-	printf("X[%d]=%lf\n",i,X[i]);
+	Maxtrix_x(B,C,I,11,k+1,k+1);
+	Transpose(G,J,21,k+1);
+	Maxtrix_x(I,J,G,11,k+1,21);
+	for(int i=1;i<=11;i++)
+		for(int j=1;j<=21;j++)
+		 sigma+=(G[i][j]-z[i][j])*(G[i][j]-z[i][j]);
+	return sigma;
 }
 
 int	main(){
-//	freopen("input.in","r",stdin);
-//	freopen("Newton.out","w",stdout);
-//	memset(a,0,sizeof(a));
-	double x[N],y[N],z[N][N],C[N][N];
+	freopen("Work.out","w",stdout);
+	double x[N],y[N],Z[N][N],C[N][N],sigma,eps=1e-7;
+	int k;
 	for(int i=0;i<=10;i++)
 		for(int j=0;j<=20;j++){
-			x[i]=0.08*i;
-			y[j]=0.5+0.05*j;
+			x[i+1]=0.08*i;
+			y[j+1]=0.5+0.05*j;
 			for(int k=1;k<=4;k++)X[k]=1;
-			Newton(x[i],y[j]);
-			z[i][j]=Interpolation(X[1],X[2]);
-		//	printf("f(X%d,Y%d)=%lf\n",i,j,z);
+			Newton(x[i+1],y[j+1]);
+			Z[i+1][j+1]=Interpolation(X[1],X[2]);
+			printf("x[%d]=%lf  y[%d]=%lf  f(x,y)=%.12e \n",i,x[i+1],j,y[j+1],Z[i+1][j+1]);
 		}
-	for(int k=0;k<=10;k++){
-		Surface_Fitting(x,y,z,C);
+	for(k=0;k<=10;k++){
+		sigma=Surface_Fitting(x,y,Z,C,k);
+		printf("K=%d,sigma=%.12e\n",k,sigma);
+		if(fabs(sigma)<eps)break;
+	}
+	put(C,k+1,k+1);
+
+	sigma=0;
+	for(int i=1;i<=8;i++)
+	for(int j=1;j<=5;j++){
+		x[i]=0.1*i;
+		y[j]=0.5+0.2*j;
+		for(k=1;k<=4;k++)X[k]=1;
+		Newton(x[i],y[j]);
+		sigma=Interpolation(X[1],X[2]);
+		printf("x[%d]=%lf  y[%d]=%lf  f(x,y)=%.12e ",i,x[i],j,y[j],sigma);
+		sigma=0;
+		for(int r=0;r<=k;r++)
+		for(int s=0;s<=k;s++){
+			sigma+=C[r+1][s+1]*pow(x[i],r)*pow(y[j],s);
+		}
+		printf("f(x,y)=%.12e\n",i,j,sigma);
+		
 		
 	}
+	
 	return 0;
 }
 
